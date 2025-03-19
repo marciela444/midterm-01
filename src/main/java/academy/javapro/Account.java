@@ -61,22 +61,15 @@ public abstract class Account implements AccountOperations {
     }
 
     @Override
-    public void deposit(double amount) {
-        if (amount <= 0) {
-            System.out.println("Deposit amount must be positive");
-            return;
-        }
-
-        balance += amount;
-        logTransaction("DEPOSIT", amount);
+public void deposit(double amount) {
+    if (amount <= 0) {
+        System.out.println("Deposit amount must be positive.");
+        return;
     }
-
-    /**
-     * Abstract method to withdraw money from the account.
-     * Each account type implements its own withdrawal rules.
-     */
-    @Override
-    public abstract void withdraw(double amount);
+    balance += amount;
+    logTransaction("DEPOSIT", amount);
+    System.out.println("Deposited $" + String.format("%.2f", amount) + " into account " + getAccountNumber());
+}
 
     @Override
     public void logTransaction(String type, double amount) {

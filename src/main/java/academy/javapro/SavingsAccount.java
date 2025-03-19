@@ -5,8 +5,8 @@ package academy.javapro;
  * Features interest rate and minimum balance requirement.
  */
 public class SavingsAccount extends Account {
-    private final double interestRate;
     private static final double MIN_BALANCE = 100.0; // Minimum balance requirement
+    private final double interestRate;
 
     /**
      * Constructor for creating a new savings account.
@@ -27,15 +27,19 @@ public class SavingsAccount extends Account {
      * @return The calculated interest amount
      */
     public double calculateInterest() {
-        throw new UnsupportedOperationException("Method not implemented");
+        return getBalance() * (interestRate / 100);
     }
 
     /**
      * Applies the calculated interest to the account balance.
      */
     public void applyInterest() {
-        throw new UnsupportedOperationException("Method not implemented");
+        double interest = calculateInterest();
+        setBalance(getBalance() + interest);  //instead of calling deposit()
+        logTransaction("INTEREST", interest); //making sure its logged as interest
+        System.out.println("Interest of $" + String.format("%.2f", interest) + " applied.");
     }
+    
 
     /**
      * Overrides the withdraw method with savings account-specific rules.
@@ -43,7 +47,14 @@ public class SavingsAccount extends Account {
      */
     @Override
     public void withdraw(double amount) {
-        throw new UnsupportedOperationException("Method not implemented");
+        double newBalance = getBalance() - amount;
+        if (amount > 0 && newBalance >= MIN_BALANCE) { 
+            setBalance(newBalance);
+            logTransaction("WITHDRAWAL", amount);
+            System.out.println("Withdrew $" + String.format("%.2f", amount) + " from Savings Account.");
+        } else {
+            System.out.println("Insufficient funds. Minimum balance of $" + MIN_BALANCE + " required.");
+        }
     }
 
     /**

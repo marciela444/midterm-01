@@ -5,7 +5,7 @@ package academy.javapro;
  * Features overdraft protection and transaction fees.
  */
 public class CheckingAccount extends Account {
-    private final double overdraftLimit;
+    private double overdraftLimit;
     private static final double TRANSACTION_FEE = 1.5; // Fee per withdrawal
 
     /**
@@ -27,7 +27,7 @@ public class CheckingAccount extends Account {
      * @return The overdraft limit
      */
     public double getOverdraftLimit() {
-        throw new UnsupportedOperationException("Method not implemented");
+        return overdraftLimit;
     }
 
     /**
@@ -36,17 +36,31 @@ public class CheckingAccount extends Account {
      * @param overdraftLimit The new overdraft limit
      */
     public void setOverdraftLimit(double overdraftLimit) {
-        throw new UnsupportedOperationException("Method not implemented");
+        this.overdraftLimit = overdraftLimit;
+        logTransaction("OVERDRAFT LIMIT CHANGE", overdraftLimit);
+        System.out.println("Overdraft limit is now updated to $" + String.format("%.2f", overdraftLimit));
     }
+    
+    
 
     /**
      * Overrides the withdraw method with checking account-specific rules.
      * Implements overdraft protection and applies transaction fees.
      */
     @Override
-    public void withdraw(double amount) {
-        throw new UnsupportedOperationException("Method not implemented");
+public void withdraw(double amount) {
+    double totalAmount = amount + TRANSACTION_FEE;
+    if (getBalance() + overdraftLimit >= totalAmount) {
+        setBalance(getBalance() - totalAmount);
+        logTransaction("WITHDRAWAL", totalAmount);
+        System.out.println("Withdrew $" + String.format("%.2f", amount) + 
+                           " (Fee: $" + TRANSACTION_FEE + "). Remaining overdraft: $" + 
+                           String.format("%.2f", (overdraftLimit + getBalance())));
+    } else {
+        System.out.println("Transaction is denied. Overdraft limit has been exceeded.");
     }
+}
+
 
     /**
      * Overrides the displayInfo method to include checking account-specific information.
